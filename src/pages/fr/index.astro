@@ -9,11 +9,20 @@ const { Content } = await render(entry);
 ---
 <Doc locale="fr" title={entry.data.title}>
   <div class="callout">
+    <strong>Essayer</strong>
+    <p>
+      Le tour s'exécute dans le navigateur : chaque page lance un fragment et montre le code de sortie, ou le diagnostic.
+      Le projet n'est pas open source pour le moment. Une question, ou un intérêt pour le code :
+      <a href="mailto:contact@noematic.eu">contact@noematic.eu</a>.
+    </p>
+    <a class="btn" href="https://why.noematic.eu">Ouvrir le tour</a>
+  </div>
+  <div class="callout">
     <strong>L'article</strong>
     <p>
       L'article présente le modèle, l'analyse interprocédurale des effets de stockage et un premier état des mesures : 76 programmes de non-régression passent, et la médiane des rapports Why/C sur 46 noyaux de calcul entier est d'environ 1,01.
     </p>
-    <a class="btn" href="/paper/overview-fr.pdf" download>Télécharger le papier (PDF)</a>
+    <a class="btn" href="/paper/why-overview-fr.pdf" download>Télécharger le papier (PDF)</a>
   </div>
   <Content />
 </Doc>

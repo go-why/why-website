@@ -45,7 +45,10 @@ const active = (u: string) => cur === u || cur.startsWith(u + '/');
     <header class="top">
       <a class="brand" href={`/${locale}/`}>{siteTitle}</a>
       <div class="top-actions">
-        <a class="paper" href={`/paper/overview-${locale}.pdf`} download>
+        <a class="play" href="https://why.noematic.eu">
+          {locale === 'fr' ? 'Essayer le tour' : 'Try the tour'}
+        </a>
+        <a class="paper" href={`/paper/why-overview-${locale}.pdf`} download>
           {locale === 'fr' ? '📄 Papier (PDF)' : '📄 Paper (PDF)'}
         </a>
         <nav class="lang" aria-label="langue">
@@ -73,6 +76,8 @@ const active = (u: string) => cur === u || cur.startsWith(u + '/');
     </div>
     <footer class="foot">
       <span>{siteTitle} — <a href={`/${locale}/`}>{langLabel}</a></span>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="mailto:contact@noematic.eu">contact@noematic.eu</a>
     </footer>
   </body>
 </html>

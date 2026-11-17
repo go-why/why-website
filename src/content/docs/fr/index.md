@@ -112,23 +112,11 @@ Un interpréteur écrit en Why serait le même programme, plus sec. Le plafond d
 
 ## Tour
 
-Le tour est une page locale d'exécution interactive. On l'ouvre avec :
-
-```
-go run ./cmd/why play
-```
+Le tour est une exécution interactive dans le navigateur. On l'ouvre sur [why.noematic.eu](https://why.noematic.eu).
 
 Chaque page a un titre, une leçon en français, une leçon en anglais, et un fragment de code avec un `main`. La page montre le code de sortie, ou le diagnostic si la construction est refusée.
 
-Un paquet se lance ainsi :
-
-```
-go run ./cmd/why run demos/compteur
-```
-
-`demos/compteur` rend 133.
-
-`go test ./...` est le contrat : les tests lancent le binaire et vérifient son comportement.
+Le projet n'est pas open source pour le moment. Une question, ou un intérêt pour le code : [contact@noematic.eu](mailto:contact@noematic.eu).
 
 ## Référence
 

@@ -110,23 +110,11 @@ An interpreter written in Why would be the same program, more concise. The C cei
 
 ## Tour
 
-The tour is a local page of interactive execution. It is opened with:
-
-```
-go run ./cmd/why play
-```
+The tour is an interactive execution in the browser. It is opened at [why.noematic.eu](https://why.noematic.eu).
 
 Each page has a title, a lesson in French, a lesson in English, and a code fragment with a `main`. The page shows the output code, or the diagnostic if the construction is refused.
 
-A package is launched like this:
-
-```
-go run ./cmd/why run demos/compteur
-```
-
-`demos/compteur` returns 133.
-
-`go test ./...` is the contract: the tests launch the binary and check its behavior.
+The project is not open source for now. A question, or an interest in the code: [contact@noematic.eu](mailto:contact@noematic.eu).
 
 ## Reference
 
