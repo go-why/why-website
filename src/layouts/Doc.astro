@@ -1,0 +1,78 @@
+---
+import '../styles.css';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  title: string;
+  locale: 'fr' | 'en';
+}
+const { title, locale } = Astro.props;
+const siteTitle = 'Why';
+const langLabel = locale === 'fr' ? 'Français' : 'English';
+const norm = (id: string) => id.replace(/\/index(\.md)?$/, '').replace(/\.md$/, '');
+const name = (id: string) => norm(id).slice(locale.length + 1);
+const urlOf = (id: string) => `/${locale}/${name(id)}`;
+
+const all = (await getCollection('docs')).filter((d) => norm(d.id).startsWith(`${locale}/`));
+
+const topLevel = all
+  .filter((d) => norm(d.id).split('/').length === 2 && name(d.id) !== 'index')
+  .sort((a, b) => a.data.weight - b.data.weight);
+
+const refChildren = topLevel.filter((d) => name(d.id).startsWith('ref-'));
+const sections = topLevel.filter((d) => !name(d.id).startsWith('ref-'));
+
+const nav = sections.map((s) => {
+  const item = { title: s.data.title, url: urlOf(s.id), children: [] as { title: string; url: string }[] };
+  if (name(s.id) === 'ref') {
+    item.children = refChildren.map((c) => ({ title: c.data.title, url: urlOf(c.id) }));
+  }
+  return item;
+});
+
+const cur = Astro.url.pathname.replace(/\/$/, '');
+const active = (u: string) => cur === u || cur.startsWith(u + '/');
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title === siteTitle ? siteTitle : `${title} · ${siteTitle}`}</title>
+    <meta name="description" content="Why — langage, spec, référence et performance." />
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href={`/${locale}/`}>{siteTitle}</a>
+      <div class="top-actions">
+        <a class="paper" href={`/paper/overview-${locale}.pdf`} download>
+          {locale === 'fr' ? '📄 Papier (PDF)' : '📄 Paper (PDF)'}
+        </a>
+        <nav class="lang" aria-label="langue">
+          <a href="/fr/" class={locale === 'fr' ? 'on' : ''}>Français</a>
+          <a href="/en/" class={locale === 'en' ? 'on' : ''}>English</a>
+        </nav>
+      </div>
+    </header>
+    <div class="wrap">
+      <aside class="nav">
+        <ul>
+          {nav.map((item) => (
+            <>
+              <li><a href={item.url} class={active(item.url) ? 'on' : ''}>{item.title}</a></li>
+              {item.children.map((c) => (
+                <li class="sub"><a href={c.url} class={active(c.url) ? 'on' : ''}>{c.title}</a></li>
+              ))}
+            </>
+          ))}
+        </ul>
+      </aside>
+      <main class="content">
+        <slot />
+      </main>
+    </div>
+    <footer class="foot">
+      <span>{siteTitle} — <a href={`/${locale}/`}>{langLabel}</a></span>
+    </footer>
+  </body>
+</html>

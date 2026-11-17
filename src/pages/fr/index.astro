@@ -1,0 +1,19 @@
+---
+import { getCollection, render } from 'astro:content';
+import Doc from '../../layouts/Doc.astro';
+
+const norm = (id: string) => id.replace(/\/index(\.md)?$/, '').replace(/\.md$/, '');
+const entry = (await getCollection('docs')).find((d) => norm(d.id) === 'fr');
+if (!entry) throw new Error("page 'fr/index' introuvable");
+const { Content } = await render(entry);
+---
+<Doc locale="fr" title={entry.data.title}>
+  <div class="callout">
+    <strong>L'article</strong>
+    <p>
+      L'article présente le modèle, l'analyse interprocédurale des effets de stockage et un premier état des mesures : 76 programmes de non-régression passent, et la médiane des rapports Why/C sur 46 noyaux de calcul entier est d'environ 1,01.
+    </p>
+    <a class="btn" href="/paper/overview-fr.pdf" download>Télécharger le papier (PDF)</a>
+  </div>
+  <Content />
+</Doc>

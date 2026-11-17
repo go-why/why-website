@@ -1,0 +1,19 @@
+---
+import { getCollection, render } from 'astro:content';
+import Doc from '../../layouts/Doc.astro';
+
+const norm = (id: string) => id.replace(/\/index(\.md)?$/, '').replace(/\.md$/, '');
+const entry = (await getCollection('docs')).find((d) => norm(d.id) === 'en');
+if (!entry) throw new Error("page 'en/index' introuvable");
+const { Content } = await render(entry);
+---
+<Doc locale="en" title={entry.data.title}>
+  <div class="callout">
+    <strong>The paper</strong>
+    <p>
+      The paper presents the model, the interprocedural analysis of storage effects, and a first state of the measurements: 76 regression programs pass, and the median Why/C ratio across 46 integer compute kernels is about 1.01.
+    </p>
+    <a class="btn" href="/paper/overview-en.pdf" download>Download the paper (PDF)</a>
+  </div>
+  <Content />
+</Doc>

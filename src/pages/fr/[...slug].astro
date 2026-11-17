@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from 'astro:content';
+import Doc from '../../layouts/Doc.astro';
+
+export async function getStaticPaths() {
+  const norm = (id: string) => id.replace(/\/index(\.md)?$/, '').replace(/\.md$/, '');
+  const all = await getCollection('docs');
+  return all
+    .filter((d) => norm(d.id).startsWith('fr/') && norm(d.id) !== 'fr/index')
+    .map((d) => ({
+      params: { slug: norm(d.id).slice('fr/'.length) },
+      props: { entry: d },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<Doc locale="fr" title={entry.data.title}>
+  <Content />
+</Doc>
