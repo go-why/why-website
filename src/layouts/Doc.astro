@@ -9,6 +9,8 @@ interface Props {
 const { title, locale } = Astro.props;
 const siteTitle = 'Why';
 const langLabel = locale === 'fr' ? 'Français' : 'English';
+const dlUrl = locale === 'fr' ? '/fr/telechargement' : '/en/download';
+const dlLabel = locale === 'fr' ? 'Téléchargement' : 'Download';
 const norm = (id: string) => id.replace(/\/index(\.md)?$/, '').replace(/\.md$/, '');
 const name = (id: string) => norm(id).slice(locale.length + 1);
 const urlOf = (id: string) => `/${locale}/${name(id)}`;
@@ -51,6 +53,9 @@ const active = (u: string) => cur === u || cur.startsWith(u + '/');
         <a class="paper" href={`/paper/why-overview-${locale}.pdf`} download>
           {locale === 'fr' ? '📄 Papier (PDF)' : '📄 Paper (PDF)'}
         </a>
+        <a class="dl" href={dlUrl}>
+          {locale === 'fr' ? '⬇ Télécharger' : '⬇ Download'}
+        </a>
         <nav class="lang" aria-label="langue">
           <a href="/fr/" class={locale === 'fr' ? 'on' : ''}>Français</a>
           <a href="/en/" class={locale === 'en' ? 'on' : ''}>English</a>
@@ -60,6 +65,7 @@ const active = (u: string) => cur === u || cur.startsWith(u + '/');
     <div class="wrap">
       <aside class="nav">
         <ul>
+          <li class="dl-item"><a href={dlUrl} class={active(dlUrl) ? 'on' : ''}>⬇ {dlLabel}</a></li>
           {nav.map((item) => (
             <>
               <li><a href={item.url} class={active(item.url) ? 'on' : ''}>{item.title}</a></li>

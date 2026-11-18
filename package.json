@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "sync:binaries": "python3 sync_binaries.py",
+    "prebuild": "python3 sync_binaries.py",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"

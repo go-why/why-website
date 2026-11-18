@@ -1,0 +1,99 @@
+---
+import Doc from '../../layouts/Doc.astro';
+import manifest from '../../data/binaries.json';
+
+const binaries = manifest.binaries;
+const tools = ['why', 'why-lsp'];
+const oses = ['darwin', 'linux', 'windows'];
+const archs = ['arm64', 'amd64'];
+
+const osLabel = { darwin: 'macOS', linux: 'Linux', windows: 'Windows' };
+const toolTitle = { why: 'why — the compiler', 'why-lsp': 'why-lsp — the language server' };
+const toolDesc = {
+  why: 'The main binary: compiles and runs Why programs (why run, why build).',
+  'why-lsp': 'The language server (LSP) for editors. Point your editor at it.',
+};
+
+const rowsFor = (tool) => {
+  const out = [];
+  for (const os of oses) {
+    for (const arch of archs) {
+      const b = binaries.find((x) => x.tool === tool && x.os === os && x.arch === arch);
+      if (b) out.push(b);
+    }
+  }
+  return out;
+};
+const fmt = (n) => (n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.ceil(n / 1024) + ' KB');
+const dateEn = new Date(manifest.generatedAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Doc locale="en" title="Download">
+  <p class="lead">
+    Native binary, statically compiled (CGO disabled), no Why runtime.
+    Each binary is provided as a <code>.zip</code>: pick your system and architecture,
+    download, unzip, and run.
+  </p>
+
+  <p class="hint">
+    arm64 = ARM 64-bit (Apple Silicon, Raspberry Pi) · amd64 = x86-64 (Intel / AMD).
+  </p>
+
+  <p class="meta">
+    Build <code>{manifest.version}</code> · generated {dateEn} · {binaries.length} binaries in total
+  </p>
+
+  {tools.map((tool) => (
+    <>
+      <h2>{toolTitle[tool]}</h2>
+      <p>{toolDesc[tool]}</p>
+      <table class="dl-table">
+        <thead>
+          <tr>
+            <th>OS</th>
+            <th>Architecture</th>
+            <th>Size</th>
+            <th>SHA-256</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {rowsFor(tool).map((b) => (
+            <tr>
+              <td>{osLabel[b.os]}</td>
+              <td>{b.arch}</td>
+              <td class="num">{fmt(b.sizeBytes)}</td>
+              <td><code class="sha" title={`sha256: ${b.sha256}`}>{b.sha256}</code></td>
+              <td class="act"><a class="dl-btn" href={`/bin/${b.name}`} download={b.name} title={`Contains: ${b.binary}`}>Download</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  ))}
+
+  <h2>Install</h2>
+  <p>The <code>.zip</code> already contains the command (<code>why</code> or <code>why-lsp</code>): unzip and it's ready to use.</p>
+  <pre><code># macOS / Linux
+unzip why-darwin-arm64.zip          # → why
+chmod +x why
+./why run my-program/
+
+# put it on the PATH
+mkdir -p "$HOME/.local/bin"
+cp why "$HOME/.local/bin/"
+</code></pre>
+  <p>On Windows, unzip (you get <code>why.exe</code> or <code>why-lsp.exe</code>) then run it directly, or add its folder to the <code>PATH</code>.</p>
+
+  <h3>Verify integrity</h3>
+  <p>
+    Compare the SHA-256 shown above with the downloaded <code>.zip</code>.
+    macOS/Linux: <code>shasum -a 256 why-darwin-arm64.zip</code>; Windows: <code>Get-FileHash why-windows-amd64.zip -Algorithm SHA256</code>.
+  </p>
+
+  <div class="callout">
+    <strong>The project is not open source yet</strong>
+    <p>
+      A question, or interest in the code: <a href="mailto:contact@noematic.eu">contact@noematic.eu</a>.
+    </p>
+  </div>
+</Doc>
