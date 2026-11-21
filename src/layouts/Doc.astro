@@ -47,8 +47,11 @@ const active = (u: string) => cur === u || cur.startsWith(u + '/');
     <header class="top">
       <a class="brand" href={`/${locale}/`}>{siteTitle}</a>
       <div class="top-actions">
-        <a class="play" href="https://why.noematic.eu">
+        <a class="play" href="https://play.why.noematic.eu">
           {locale === 'fr' ? 'Essayer le tour' : 'Try the tour'}
+        </a>
+        <a class="defi" href="https://defi.why.noematic.eu">
+          {locale === 'fr' ? 'Les défis' : 'Challenges'}
         </a>
         <a class="paper" href={`/paper/why-overview-${locale}.pdf`} download>
           {locale === 'fr' ? '📄 Papier (PDF)' : '📄 Paper (PDF)'}

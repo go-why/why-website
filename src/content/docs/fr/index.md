@@ -112,7 +112,9 @@ Un interpréteur écrit en Why serait le même programme, plus sec. Le plafond d
 
 ## Tour
 
-Le tour est une exécution interactive dans le navigateur. On l'ouvre sur [why.noematic.eu](https://why.noematic.eu).
+Le tour est une exécution interactive dans le navigateur. On l'ouvre sur [play.why.noematic.eu](https://play.why.noematic.eu).
+
+Les défis sont l'entraînement : chaque niveau donne un objectif et une contrainte, et c'est toi qui écris le code. On les ouvre sur [defi.why.noematic.eu](https://defi.why.noematic.eu).
 
 Chaque page a un titre, une leçon en français, une leçon en anglais, et un fragment de code avec un `main`. La page montre le code de sortie, ou le diagnostic si la construction est refusée.
 

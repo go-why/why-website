@@ -110,7 +110,9 @@ An interpreter written in Why would be the same program, more concise. The C cei
 
 ## Tour
 
-The tour is an interactive execution in the browser. It is opened at [why.noematic.eu](https://why.noematic.eu).
+The tour is an interactive execution in the browser. It is opened at [play.why.noematic.eu](https://play.why.noematic.eu).
+
+The challenges are the practice: each level gives a goal and a constraint, and you write the code. They are opened at [defi.why.noematic.eu](https://defi.why.noematic.eu).
 
 Each page has a title, a lesson in French, a lesson in English, and a code fragment with a `main`. The page shows the output code, or the diagnostic if the construction is refused.
 
