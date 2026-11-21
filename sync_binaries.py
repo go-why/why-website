@@ -12,9 +12,13 @@ pour être utilisable tel quel dès la décompression.
 Usage :
     python3 sync_binaries.py
 
-Le script est idempotent : il vide public/bin/ avant de rezipper, pour qu'aucun
-fichier obsolète ne subsiste. S'il ne trouve aucun binaire reconnu, il échoue
-(au lieu de laisser un build avec des liens de téléchargement cassés).
+Deux modes :
+  • dist/ présent → (re)zippe les binaires frais et réécrit le manifeste (dev local).
+  • dist/ absent  → si public/bin/ contient déjà des .zip + src/data/binaries.json,
+                    on les réutilise tels quels (CI / checkout propre) et on ne fait rien ;
+                    sinon on échoue au lieu de laisser un build avec des liens cassés.
+Le zipage est idempotent : il vide public/bin/ avant de rezipper, pour qu'aucun
+fichier obsolète ne subsiste.
 """
 
 import hashlib
@@ -61,11 +65,28 @@ def make_zip(src: Path, dst: Path, arcname: str) -> None:
         zf.write(src, arcname=arcname)
 
 
+def committed_artifacts() -> bool:
+    """Vrai si le dépôt contient déjà des .zip et leur manifeste (mode CI / checkout propre)."""
+    if not OUT_BIN.is_dir() or not (OUT_DATA / "binaries.json").is_file():
+        return False
+    return any(p.is_file() for p in OUT_BIN.glob("*.zip"))
+
+
 def main() -> None:
     if not DIST.is_dir():
+        if committed_artifacts():
+            print(
+                "→ dist/ introuvable : "
+                f"{DIST}\n"
+                "→ on réutilise les binaires déjà commités dans "
+                f"{OUT_BIN.relative_to(HERE)}/ + {OUT_DATA.relative_to(HERE)}/binaries.json"
+            )
+            return
         raise SystemExit(
             f"✗ dist/ introuvable : {DIST}\n"
-            f"  Construisez d'abord les binaires depuis la racine du dépôt : ./build-all.sh"
+            f"  Et aucun binaire commité dans {OUT_BIN}/\n"
+            f"  Soit construisez les binaires depuis la racine du dépôt : ./build-all.sh\n"
+            f"  Soit committez public/bin/*.zip + src/data/binaries.json (comme pour la CI)."
         )
 
     files = sorted(p for p in DIST.iterdir() if p.is_file())
